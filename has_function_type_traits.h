@@ -12,7 +12,7 @@ struct TRAIT_NAME##_helper : std::false_type {};                                
 /* Partially specialized templated is true case, this will*/                        \
 /* be instantiated if SFINAE doesnt fail                  */                        \
 template <typename T, typename ReturnType, typename ... ARGS>                       \
-struct TRAIT_NAME##_helper <T, ReturnType, std::enable_if_t< std::is_same_v< decltype(T::FUNCTION_NAME(std::declval<ARGS>()...)), ReturnType>>, ARGS...> : std::true_type {}; \
+struct TRAIT_NAME##_helper <T, ReturnType, std::enable_if_t< std::is_same_v< decltype(&T::FUNCTION_NAME), ReturnType(*)(ARGS...)>>, ARGS...> : std::true_type {}; \
 }                                                                                   \
                                                                                     \
 /* This using directive serves to mask the third template */                        \
@@ -37,7 +37,7 @@ struct TRAIT_NAME##_helper : std::false_type {};                                
 /* Partially specialized templated is true case, this will*/                        \
 /* be instantiated if SFINAE doesnt fail                  */                        \
 template <typename T, typename ReturnType, typename ... ARGS>                       \
-struct TRAIT_NAME##_helper <T, ReturnType, std::enable_if_t< std::is_same_v< decltype(std::declval<T&>().FUNCTION_NAME(std::declval<ARGS>()...)), ReturnType>>, ARGS...> : std::true_type {}; \
+struct TRAIT_NAME##_helper <T, ReturnType, std::enable_if_t< std::is_same_v< decltype(&T::FUNCTION_NAME), ReturnType(T::*)(ARGS...)>>, ARGS...> : std::true_type {}; \
 }                                                                                   \
                                                                                     \
 /* This using directive serves to mask the third template */                        \
